@@ -1,4 +1,5 @@
 import {bookables} from "../../static.json";
+import {useState} from "react";
 
 export default function BookablesList () {
 
@@ -6,7 +7,12 @@ export default function BookablesList () {
 
   const bookablesInGroup = bookables.filter(b => b.group === group);
 
-  const bookableIndex = 1;
+  const [bookableIndex, setBookableIndex] = useState(1)
+
+  function changeBookable(selectedIndex){
+    setBookableIndex(selectedIndex)
+    console.log(selectedIndex);
+  }
 
   return (
     <ul className="bookables items-list-nav">
@@ -17,6 +23,7 @@ export default function BookablesList () {
         >
           <button
             className="btn"
+            onClick={()=>changeBookable(i)}
           >
             {b.title}
           </button>
