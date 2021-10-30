@@ -6,16 +6,16 @@ export default function UsersList () {
 
     return (
         <ul className="users items-list-nav">
-            {users.map((u, i) => (
+            {users.map((user, index) => (
                 <li
-                    key={u.id}
-                    className={i === userIndex ? "selected" : null}
+                    key={user.id}
+                    className={index === userIndex ? "selected" : null}
                 >
                     <button
                         className="btn"
-                        onClick={() => setUserIndex(i)}
+                        onClick={() => setUserIndex(index)}
                     >
-                        {u.name}
+                        {user.name}
                     </button>
                 </li>
             ))}
