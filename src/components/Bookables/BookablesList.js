@@ -12,6 +12,9 @@ const  [group, setGroup] = useState("Rooms")
   const [bookableIndex, setBookableIndex] = useState(1)
   const groups = [...new Set(bookables.map(b => b.group))];
 
+  const bookable = bookablesInGroup[bookableIndex];
+  const [hasDetails, setHasDetails] = useState(false);
+
   function nextBookable () {
     setBookableIndex(i => (i + 1) % bookablesInGroup.length);
   }
