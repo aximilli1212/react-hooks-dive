@@ -1,17 +1,36 @@
-import {useState, Fragment} from 'react';
+import {useState, Fragment, useReducer} from 'react';
 import {bookables, sessions, days} from "../../static.json";
 import {FaArrowRight} from "react-icons/fa";
+import reducer from "./reducer"
+import {init} from "ramda";
+
+const initialState = {
+  group: "Rooms",
+  bookableIndex: 0,
+  hasDetails: true,
+  bookables
+}
+
+
 
 export default function BookablesList () {
-  const [group, setGroup] = useState("Kit");
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const {group , bookableIndex, bookables, hasDetails} = state;
   const bookablesInGroup = bookables.filter(b => b.group === group);
-  const [bookableIndex, setBookableIndex] = useState(0);
   const groups = [...new Set(bookables.map(b => b.group))];
   const bookable = bookablesInGroup[bookableIndex];
-  const [hasDetails, setHasDetails] = useState(false);
+
+  function changeGroup(event){
+    dispatch({
+      type: "SET_GROUP",
+      payload: event.target.value
+    })
+  }
 
   function nextBookable () {
-    setBookableIndex(i => (i + 1) % bookablesInGroup.length);
+    dispatch({
+      type: "NEXT_BOOKABLE"
+    })
   }
 
   return (
@@ -19,11 +38,10 @@ export default function BookablesList () {
         <div>
           <select
               value={group}
-              onChange={(e) => setGroup(e.target.value)}
+              onChange={changeGroup}
           >
             {groups.map(g => <option value={g} key={g}>{g}</option>)}
           </select>
-
           <ul className="bookables items-list-nav">
             {bookablesInGroup.map((b, i) => (
                 <li
