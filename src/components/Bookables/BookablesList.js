@@ -1,8 +1,7 @@
-import {useState, Fragment, useReducer} from 'react';
+import { Fragment, useReducer} from 'react';
 import {bookables, sessions, days} from "../../static.json";
 import {FaArrowRight} from "react-icons/fa";
 import reducer from "./reducer"
-import {init} from "ramda";
 
 const initialState = {
   group: "Rooms",
@@ -11,13 +10,11 @@ const initialState = {
   bookables
 }
 
-
-
 export default function BookablesList () {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {group , bookableIndex, bookables, hasDetails} = state;
   const bookablesInGroup = bookables.filter(b => b.group === group);
-  const groups = [...new Set(bookables.map(b => b.group))];
+  const groups = [...new Set(bookables.map(b => b.group))]; //Use set for Unique values
   const bookable = bookablesInGroup[bookableIndex];
 
   function changeGroup(event){
@@ -27,9 +24,22 @@ export default function BookablesList () {
     })
   }
 
+  function changeBookable(selectedIndex){
+    dispatch({
+      type: "SET_BOOKABLE",
+      payload: selectedIndex
+    })
+  }
+
   function nextBookable () {
     dispatch({
       type: "NEXT_BOOKABLE"
+    })
+  }
+
+  function toggleDetails(){
+    dispatch({
+      type: "TOGGLE_HAS_DETAILS",
     })
   }
 
@@ -50,7 +60,7 @@ export default function BookablesList () {
                 >
                   <button
                       className="btn"
-                      onClick={() => setBookableIndex(i)}
+                      onClick={() => changeBookable(i)}
                   >
                     {b.title}
                   </button>
@@ -81,7 +91,7 @@ export default function BookablesList () {
                   <input
                       type="checkbox"
                       checked={hasDetails}
-                      onChange={() => setHasDetails(has => !has)}
+                      onChange={ toggleDetails}
                   />
                   Show Details
                 </label>
